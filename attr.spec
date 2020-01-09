@@ -1,7 +1,7 @@
 Summary: Utilities for managing filesystem extended attributes
 Name: attr
 Version: 2.4.46
-Release: 10%{?dist}
+Release: 12%{?dist}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Source: http://download.savannah.gnu.org/releases-noredirect/attr/attr-%{version}.src.tar.gz
 
@@ -142,6 +142,12 @@ chmod 0755 $RPM_BUILD_ROOT/%{_libdir}/libattr.so.*.*.*
 %{_libdir}/libattr.so.*
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.4.46-12
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 2.4.46-11
+- Mass rebuild 2013-12-27
+
 * Fri May 03 2013 Kamil Dudka <kdudka@redhat.com> 2.4.46-10
 - use <sys/syscalls.h> to fix build on aarch64 (#957989)
 
