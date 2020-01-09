@@ -1,7 +1,7 @@
 Summary: Utilities for managing filesystem extended attributes
 Name: attr
 Version: 2.4.44
-Release: 4%{?dist}
+Release: 7%{?dist}
 Conflicts: xfsdump < 2.0.0
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Source: http://download.savannah.gnu.org/releases-noredirect/attr/attr-%{version}.src.tar.gz
@@ -11,8 +11,12 @@ Patch2: attr-2.4.32-build.patch
 Patch3: attr-2.4.43-leak.patch
 Patch4: attr-2.4.44-tests.patch
 Patch5: attr-bz599562.patch
+Patch6: attr-bz651119.patch
+Patch7: attr-bz665050.patch
+Patch8: attr-bz674870.patch
+Patch9: attr-bz665049.patch
 License: GPLv2+
-URL: http://oss.sgi.com/projects/xfs/
+URL: http://acl.bestbits.at/
 Group: System Environment/Base
 BuildRequires: gettext
 BuildRequires: libtool
@@ -72,6 +76,18 @@ you'll also want to install attr.
 # bz #599562
 %patch5 -p1
 
+# bz #651119
+%patch6 -p1
+
+# bz #665050
+%patch7 -p1
+
+# bz #674870
+%patch8 -p1
+
+# bz #665049
+%patch9 -p1
+
 # test-suite helper script
 install -m0755 %{SOURCE2} test/
 
@@ -79,7 +95,7 @@ autoconf
 
 %build
 # attr abuses libexecdir
-%configure --libdir=/%{_lib} --libexecdir=%{_libdir}
+%configure --libdir=/%{_lib} --libexecdir=%{_libdir} LDFLAGS="$LDFLAGS -Wl,-z,relro"
 make LIBTOOL="libtool --tag=CC"
 
 %check
@@ -137,13 +153,25 @@ rm -rf $RPM_BUILD_ROOT
 /%{_lib}/libattr.so.*
 
 %changelog
-* Thu Jun 03 2010 Kamil Dudka <kdudka@redhat.com> 2.2.44-4
+* Mon Aug 08 2011 Kamil Dudka <kdudka@redhat.com> 2.4.44-7
+- build with partial RELRO support as a security enhancement (#727307)
+
+* Mon Jun 27 2011 Kamil Dudka <kdudka@redhat.com> 2.4.44-6
+- do not follow symlinks to directories with -h (#665049)
+
+* Mon Jun 27 2011 Kamil Dudka <kdudka@redhat.com> 2.4.44-5
+- encode NULs properly with getfattr --encoding=text (#651119)
+- return non-zero exit code on failure of getfattr (#665050)
+- document supported encodings of values (#674870)
+- update project URL in package specification (#702639)
+
+* Thu Jun 03 2010 Kamil Dudka <kdudka@redhat.com> 2.4.44-4
 - fix memory leak and possible double free (#599562)
 
-* Tue May 25 2010 Kamil Dudka <kdudka@redhat.com> 2.2.44-3
+* Tue May 25 2010 Kamil Dudka <kdudka@redhat.com> 2.4.44-3
 - let attr depend on the same version of libattr (#595689)
 
-* Wed Mar 24 2010 Kamil Dudka <kdudka@redhat.com> 2.2.44-2
+* Wed Mar 24 2010 Kamil Dudka <kdudka@redhat.com> 2.4.44-2
 - run the test-suite if possible
 
 * Thu Jan 07 2010 Kamil Dudka <kdudka@redhat.com> 2.4.44-1
