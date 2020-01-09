@@ -1,7 +1,7 @@
 Summary: Utilities for managing filesystem extended attributes
 Name: attr
 Version: 2.4.46
-Release: 12%{?dist}
+Release: 13%{?dist}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Source: http://download.savannah.gnu.org/releases-noredirect/attr/attr-%{version}.src.tar.gz
 
@@ -25,6 +25,9 @@ Patch9: attr-2.4.44-bz669095.patch
 
 # use <sys/syscalls.h> to fix build on aarch64 (#957989)
 Patch10: attr-2.4.44-bz957989.patch
+
+# remove unreliable tests from the test suite (#1367730)
+Patch11: attr-2.4.44-tests-ls.patch
 
 License: GPLv2+
 URL: http://acl.bestbits.at/
@@ -79,6 +82,7 @@ you'll also want to install attr.
 %patch8 -p1
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 %build
 # attr <= 2.4.46 abuses libexecdir (fixed upstream in 2971df45)
@@ -142,6 +146,9 @@ chmod 0755 $RPM_BUILD_ROOT/%{_libdir}/libattr.so.*.*.*
 %{_libdir}/libattr.so.*
 
 %changelog
+* Thu Sep 21 2017 Kamil Dudka <kdudka@redhat.com> 2.4.46-13
+- remove unreliable tests from the test suite (#1367730)
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 2.4.46-12
 - Mass rebuild 2014-01-24
 
